@@ -7,33 +7,34 @@ grammar Clausewitz;
 
 file : (pair)* ;
 
-obj : '{' (pair)* '}' ;
+clause : '{' (pair)* '}' ;
 
-pair : STRING METHOD value ;
+pair : STRING VALUE_OPERATOR value ;
 
-METHOD : '=' | '<>' | '>' | '<' | '<=' | '>=' ;
+VALUE_OPERATOR : '=' | '<>' | '>' | '<' | '<=' | '>=' ;
 
 array : '{' value+ '}' ;
 
 value :
 	 INT
 	|PERCENT
-	|DECIMAL
+	|FLOAT
 	|DATE
 	|STRING
-	|obj
+	|clause
 	|array ;
 
 INT : '-'? [0-9]+ ;
 
 PERCENT : '-'? [0-9]+ '%' ;
 
-DECIMAL : '-'? [0-9]+ '.' [0-9]+ ;
+FLOAT : '-'? [0-9]+ '.' [0-9]+ ;
 
-DATE : [0-9]+ '.' [0-9]+ '.' [0-9]+ ;
+DATE : [0-9]+ '.' [0-9]+ '.' [0-9]+ ('.' [0-9]+)*;
 
 STRING : '"' (~["])* '"'
 		| [A-Za-z][A-Za-z_0-9.%-]* ;
 
 WS : [ \t\n\r] + -> skip ;
 COMMENT : '#'~[\r\n]* -> channel(HIDDEN) ;
+
